@@ -1,7 +1,5 @@
-MATCH (u:Usuario {nome: "Alice"})-[:OUVIU]->(m:Musica)<-[:OUVIU]-(vizinho:Usuario)
-MATCH (vizinho)-[r:OUVIU]->(recomendacao:Musica)
-WHERE NOT (u)-[:OUVIU]->(recomendacao)
-RETURN recomendacao.titulo AS MusicaSugerida, 
-       COUNT(DISTINCT vizinho) AS AmigosQueOuvem, 
-       SUM(r.vezes) AS Pontuacao
-ORDER BY Pontuacao DESC;
+// Recomendar músicas de artistas que pessoas com o mesmo gosto que o Carlos ouvem
+MATCH (carlos:Usuario {nome: 'Carlos'})-[:OUVIU]->(m:Musica)<-[:OUVIU]-(outro:Usuario)
+MATCH (outro)-[:OUVIU]->(rec:Musica)
+WHERE NOT (carlos)-[:OUVIU]->(rec)
+RETURN DISTINCT rec.titulo AS Sugestao, outro.nome AS Porque_Este_Usuario_Tambem_Ouviu;
